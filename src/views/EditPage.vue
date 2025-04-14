@@ -68,9 +68,7 @@
 
             <div class="form-button">
               <button type="submit" class="btn update-btn">Update</button>
-              <router-link to="/" class="text-decoration-none">
-                <button type="submit" class="btn cancel-btn">Cancel</button>
-              </router-link>
+              <button type="submit" class="btn cancel-btn" @click="handleBack()">Cancel</button>
             </div>
           </form>
         </div>
@@ -123,7 +121,7 @@ export default {
       })
       .then((response) => {
         this.tasksData = response.data.data
-        this.originalData = {...response.data.data}
+        this.originalData = { ...response.data.data }
         this.isLoading = false
         this.isSubmit = false
       })
@@ -133,11 +131,11 @@ export default {
     async updateTasks() {
       this.isSubmit = true
 
-      const sameData = 
-      this.tasksData.tasks_name === this.originalData.tasks_name &&
-      this.tasksData.tasks_description === this.originalData.tasks_description &&
-      this.tasksData.tasks_priority === this.originalData.tasks_priority &&
-      this.tasksData.due_date === this.originalData.due_date
+      const sameData =
+        this.tasksData.tasks_name === this.originalData.tasks_name &&
+        this.tasksData.tasks_description === this.originalData.tasks_description &&
+        this.tasksData.tasks_priority === this.originalData.tasks_priority &&
+        this.tasksData.due_date === this.originalData.due_date
 
       if (sameData) {
         this.isSubmit = false
@@ -169,12 +167,12 @@ export default {
     async handleBack() {
       const from = this.$route.query.from
 
-      if ( from === 'completed' ) {
+      if (from === 'completed') {
         this.$router.push({ path: '/completed' })
       } else {
         this.$router.push({ path: '/' })
       }
-    }
+    },
   },
 }
 </script>
