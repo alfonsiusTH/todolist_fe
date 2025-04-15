@@ -6,13 +6,16 @@
         <span>Good Job!</span>
         <h2>You have completed all your task</h2>
       </div>
+      <div class="search-container">
+        <input v-model="searchQuery" placeholder="Search your tasks here..." type="text" class="search-input">
+      </div>
       <div class="menu-body">
         <LoadingSpinner v-if="isLoading" />
         <div v-else-if="Array.isArray(tasksData) && tasksData.length === 0" class="no-data">
           <span class="fw-bold fs-4">No Completed Tasks</span>
         </div>
         <div v-else class="d-flex flex-column w-100">
-          <div v-for="(completedTasks, index) in tasksData.slice().reverse()" :key="completedTasks.id" class="items">
+          <div v-for="(completedTasks, index) in searchedData.slice().reverse()" :key="completedTasks.id" class="items">
             <div class="number">
               <span>{{ index + 1 }}</span>
             </div>
@@ -56,10 +59,16 @@ export default {
     return {
       tasksData: [],
       isLoading: false,
+      searchQuery: ''
     }
   },
   mounted() {
     this.completedData()
+  },
+  computed: {
+    searchedData() {
+      return this.tasksData.filter(tasks => tasks.tasks_name.toLowerCase().includes(this.searchQuery.toLowerCase()))
+    }
   },
   methods: {
     async completedData() {
@@ -126,6 +135,13 @@ export default {
   color: var(--white-color);
 }
 
+.search-container {
+  display: flex;
+  justify-content: start;
+  width: 100%;
+  padding-left: 4em;
+}
+
 .menu-body {
   display: flex;
   flex-direction: column;
@@ -134,6 +150,18 @@ export default {
   padding: 0 5%;
   position: relative;
   margin-top: 2em;
+}
+
+.search-input {
+  width: 50%;
+  padding: 0.5em 2%;
+  border: none;
+  border-radius: 5px;
+}
+
+.search-input:focus {
+  outline: none;
+  border: 1px solid var(--font-color);
 }
 
 .menu-body .items {

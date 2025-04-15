@@ -22,12 +22,15 @@
         </router-link>
       </div>
       <div class="menu-inner-body">
+        <div class="search-container d-flex justify-content-start w-100">
+          <input v-model="searchQuery" placeholder="Search your tasks here..." type="text" name="" id="" class="search-input">
+        </div>
         <LoadingSpinner v-if="isLoading" />
         <div v-else-if="Array.isArray(tasksData) && tasksData.length === 0" class="menu-items-no-data">
           <span class="fw-bold fs-4">No Tasks</span>
         </div>
         <div v-else class="w-100 mt-2">
-          <div v-for="(data, index) in tasksData.slice().reverse()" :key="data.id" class="menu-items-data">
+          <div v-for="(data, index) in searchedData.slice().reverse()" :key="data.id" class="menu-items-data">
             <div class="no">
               <span>{{ index + 1 }}</span>
             </div>
@@ -71,10 +74,16 @@ export default {
     return {
       tasksData: [],
       isLoading: false,
+      searchQuery: '',
     }
   },
   mounted() {
     this.getData()
+  },
+  computed : {
+    searchedData() {
+      return this.tasksData.filter(tasks => tasks.tasks_name.toLowerCase().includes(this.searchQuery.toLowerCase()))
+    }
   },
   methods: {
     async getData() {
@@ -167,6 +176,18 @@ export default {
   padding: 0 2%;
   width: 100%;
   position: relative;
+}
+
+.search-input {
+  width: 50%;
+  padding: 0.5em 2%;
+  border: none;
+  border-radius: 5px;
+}
+
+.search-input:focus {
+  outline: none;
+  border: 1px solid var(--font-color);
 }
 
 .menu-body:active span {
